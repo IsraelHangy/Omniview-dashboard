@@ -41,16 +41,26 @@ export const Team = () => {
         }
     };
 
+    const [activeChat, setActiveChat] = useState<string | null>(null);
+
+    const handleMessage = (name: string) => {
+        setActiveChat(name);
+        setTimeout(() => {
+            setActiveChat(null);
+            showToast(`Message envoyé à ${name}`, 'success');
+        }, 1500);
+    };
+
     return (
         <PageContainer title="Équipe">
             <div className="flex justify-between items-center mb-6">
-                <p className="text-slate-500">Gérez les membres de votre équipe et leurs permissions.</p>
+                <p className="text-slate-500 hidden md:block">Gérez les membres de votre équipe et leurs permissions.</p>
                 <button
                     onClick={() => setIsInviteOpen(true)}
                     className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 transition-colors shadow-lg shadow-primary-500/20"
                 >
                     <Plus className="h-4 w-4" />
-                    <span>Inviter un membre</span>
+                    <span>Inviter</span>
                 </button>
             </div>
 
@@ -70,10 +80,13 @@ export const Team = () => {
                         <p className="text-primary-600 font-medium text-sm mb-4">{member.role}</p>
 
                         <div className="flex gap-2 w-full mt-2">
-                            <a href={`mailto:${member.email}`} className="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg bg-slate-50 text-slate-600 text-sm font-medium hover:bg-slate-100 transition-colors">
+                            <button
+                                onClick={() => handleMessage(member.name)}
+                                className="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg bg-slate-50 text-slate-600 text-sm font-medium hover:bg-slate-100 transition-colors"
+                            >
                                 <Mail className="h-4 w-4" />
-                                Email
-                            </a>
+                                Message
+                            </button>
                             <button
                                 onClick={() => startCall(member.name)}
                                 className="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg bg-slate-50 text-slate-600 text-sm font-medium hover:bg-slate-100 transition-colors"
@@ -85,6 +98,15 @@ export const Team = () => {
                     </div>
                 ))}
             </div>
+
+            <Modal isOpen={!!activeChat} onClose={() => setActiveChat(null)} title="Envoi de message">
+                <div className="flex flex-col items-center py-6 space-y-4">
+                    <div className="h-16 w-16 bg-blue-50 rounded-full flex items-center justify-center">
+                        <Mail className="h-8 w-8 text-blue-500 animate-bounce" />
+                    </div>
+                    <p className="text-slate-600">Envoi du message sécurisé à <span className="font-bold">{activeChat}</span>...</p>
+                </div>
+            </Modal>
 
             <Modal isOpen={isInviteOpen} onClose={() => setIsInviteOpen(false)} title="Inviter un membre">
                 <form onSubmit={handleInvite} className="space-y-4">

@@ -1,11 +1,13 @@
 import { PageContainer } from '../components/PageContainer';
 import { ActivityChart } from '../components/ActivityChart';
-import { ArrowUpRight, TrendingUp, Users, ShoppingCart } from 'lucide-react';
+import { ArrowUpRight, TrendingUp, Users, ShoppingCart, Download } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
+import { useToast } from '../context/ToastContext';
 
 export const Analytics = () => {
     const location = useLocation();
+    const { showToast } = useToast();
 
     useEffect(() => {
         if (location.search.includes('section=insights')) {
@@ -21,8 +23,34 @@ export const Analytics = () => {
         }
     }, [location]);
 
+    const handleExport = () => {
+        // Simulation of file download
+        showToast('Le rapport complet (PDF) a été téléchargé.', 'success');
+
+        // Simulating a real download link click for UI feedback
+        const link = document.createElement('a');
+        link.href = '#';
+        link.download = 'Omniview_Rapport_2023.pdf';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     return (
         <PageContainer title="Analytique">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                <div>
+                    <p className="text-slate-500">Vue d'ensemble des performances de votre entreprise.</p>
+                </div>
+                <button
+                    onClick={handleExport}
+                    className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50 hover:text-primary-600 transition-colors shadow-sm"
+                >
+                    <Download className="h-4 w-4" />
+                    <span>Exporter le rapport</span>
+                </button>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
                     <div className="flex items-center gap-4 mb-4">

@@ -106,7 +106,7 @@ export const BusinessProvider = ({ children }: { children: ReactNode }) => {
                 }
             }
 
-        }, 15000); // Trigger every 15 seconds for demo purposes (faster than 2 mins to show effect)
+        }, 600000); // Trigger every 10 minutes for realism as requested
 
         return () => clearInterval(interval);
     }, [addNotification]);

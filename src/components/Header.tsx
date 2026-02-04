@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Search } from 'lucide-react';
+import { Search, Menu } from 'lucide-react';
 
-export const Header = () => {
+interface HeaderProps {
+    onMenuClick: () => void;
+}
+
+export const Header = ({ onMenuClick }: HeaderProps) => {
     const [time, setTime] = useState(new Date());
 
     useEffect(() => {
@@ -12,11 +16,22 @@ export const Header = () => {
     }, []);
 
     return (
-        <header className="h-16 bg-white/50 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-6 sticky top-0 z-20">
+        <header className="h-16 bg-white/50 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-4 md:px-6 sticky top-0 z-20">
             <div className="flex items-center gap-4">
+                <button
+                    onClick={onMenuClick}
+                    className="md:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+                >
+                    <Menu className="h-6 w-6" />
+                </button>
+
                 <h1 className="text-xl font-bold bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent hidden md:block">
                     Omniview
                 </h1>
+                <h1 className="text-xl font-bold bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent md:hidden">
+                    Omniview
+                </h1>
+
                 <div className="hidden md:flex items-center gap-2 px-3 py-1 bg-green-50 rounded-full border border-green-100">
                     <span className="relative flex h-2 w-2">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
@@ -36,7 +51,7 @@ export const Header = () => {
                     />
                 </div>
 
-                <div className="flex flex-col items-end">
+                <div className="flex flex-col items-end hidden sm:flex">
                     <span className="text-sm font-semibold text-slate-700">
                         {time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
